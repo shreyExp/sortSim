@@ -10,8 +10,6 @@ using namespace std;
 using namespace cv;
 
 void print(Element *a, int n);
-void shuffle(Element* a, int size, int times, Mat& M);
-void shuffle2(Element* a, int size, int times, Mat& M);
 
 int main(int argc, char** argv){
 	namedWindow("hello", WINDOW_NORMAL);
@@ -61,49 +59,3 @@ void print(Element *a, int n){
 }
 
 
-void shuffle(Element* a, int size, int times, Mat& M){
-	RNG rng(0xFFFFFFFF);
-	Element temp;
-	int breakIndex;
-	int delay = 1000;
-	record(M, a, size, "hello", delay);
-	for(int i = 0; i < times; i++){
-		breakIndex = rng.uniform(0,size-1);
-		for(int j = breakIndex; j < size; j++){
-			temp = a[j];
-			a[j] = a[j-breakIndex];
-			a[j-breakIndex] = temp;
-			record(M, a, size, "hello", 500);
-		}
-		if(i < times/10)
-			delay = 1000;
-		else
-			delay = 50;
-		record(M, a, size, "hello", delay);
-	}
-}
-
-void shuffle2(Element* a, int size, int times, Mat& M){
-	RNG rng(0xFFFFFFFF);
-	Element temp;
-	int breakIndexLeft;
-	int breakIndexRight;
-	int delay = 1000;
-	record(M, a, size, "hello", delay);
-	for(int k = 0; k < times; k++){
-		breakIndexLeft = rng.uniform(0,size/2);
-		breakIndexRight = rng.uniform(size/2 + 1, size-1);
-		for(int i = breakIndexLeft; i < breakIndexRight; i++){
-			temp = a[breakIndexLeft];
-			for(int j = breakIndexLeft+1; j < size; j++){
-				a[j-1] = a[j];
-			}
-			a[size-1] = temp;
-		}
-		if(k < times/10)
-			delay = 1000;
-		else
-			delay = 50;
-		record(M, a, size, "hello", delay);
-	}
-}
